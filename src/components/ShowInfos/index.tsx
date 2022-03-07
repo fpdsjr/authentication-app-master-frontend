@@ -3,11 +3,7 @@ import { useAuth } from '../../context/AuthProvider/useAuth';
 
 // import { Container } from './styles';
 
-interface IChildren {
-  children: ReactNode;
-}
-
-export const ShowInfos = ({ children }: IChildren) => {
+export const ShowInfos = ({ children }: { children: JSX.Element }) => {
   const auth = useAuth();
 
   if (!auth.email) {
