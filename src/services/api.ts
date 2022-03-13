@@ -15,5 +15,5 @@ Api.interceptors.request.use(
   },
   (error) => {
     return console.log('test');
-  }
+  },
 );
