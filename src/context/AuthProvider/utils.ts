@@ -33,3 +33,15 @@ export async function LoginRequest(email: string, password: string) {
     return null;
   }
 }
+
+export async function LoginWithGithub(githubCode: string) {
+  try {
+    const request = await Api.post('/github/authenticate', {
+      code: githubCode,
+    });
+    console.log(request.data);
+    return request.data;
+  } catch (error) {
+    return null;
+  }
+}

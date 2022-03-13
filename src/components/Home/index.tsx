@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Api } from '../../services/api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthProvider/useAuth';
 
 // import { Container } from './styles';
@@ -25,11 +25,36 @@ export const Home: React.FC = () => {
     }
   };
 
+  const handleLoginGithub = () => {
+    const sighInUrl =
+      'https://github.com/login/oauth/authorize?scope=user&client_id=514dc495b6859911bdd8';
+
+    auth.email = 'authenticated';
+    window.location.href = sighInUrl;
+  };
+
+  const signIn = async (githubCode: string) => {
+    await auth.authenticateWithGithub(githubCode);
+  };
+
+  useEffect(() => {
+    const url = window.location.href;
+    const hasGithubCode = url.includes('?code=');
+    if (hasGithubCode) {
+      const [urlWithoutCode, githubCode] = url.split('?code=');
+
+      window.history.pushState({}, '', urlWithoutCode);
+      signIn(githubCode);
+      navigate('/profile');
+    }
+  }, []);
+
   return (
     <>
       <input value={email} onChange={(e) => setEmail(e.target.value)} />
       <input value={password} onChange={(e) => setPassword(e.target.value)} />
       <button onClick={handleSubmitRegister}>Start coding now</button>
+      <button onClick={handleLoginGithub}>Login With Github</button>
     </>
   );
 };
